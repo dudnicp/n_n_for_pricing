@@ -17,12 +17,24 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> WeightedError { get; }
 
+        public IActivator Activator { get; }
+
+        public Matrix<double> NetInput { get; }
+
+        public Matrix<double> Weights { get; }
+
+        public Matrix<double> Bias { get; }
+
         public BasicStandardLayer(Matrix<double> weights, Matrix<double> bias, int batchSize, IActivator activator)
         {
             BatchSize = batchSize;
             InputSize = weights.RowCount;
             LayerSize = weights.ColumnCount;
+            Weights = Matrix<double>.Build.DenseOfMatrix(weights);
+            Bias = Matrix<double>.Build.DenseOfMatrix(bias);
+            NetInput = Matrix<double>.Build.Dense(LayerSize, BatchSize);
             Activation = Matrix<double>.Build.Dense(LayerSize, BatchSize);
+            Activator = activator;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
@@ -33,7 +45,8 @@ namespace NeuralNetwork.Layers
 
         public void Propagate(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            Weights.TransposeThisAndMultiply(input).Add(Bias, NetInput);
+            NetInput.Map(Activator.Apply, Activation);
         }
 
         public void UpdateParameters()
