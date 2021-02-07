@@ -1,7 +1,9 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.Layers;
+using NeuralNetwork.Common.GradientAdjustmentParameters;
 using System;
+using NeuralNetwork.Common.Serialization;
 
 namespace NeuralNetwork.Layers
 {
@@ -15,6 +17,8 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> Activation { get; }
 
+        public Matrix<double> PreviousActivation { get; }
+
         public Matrix<double> WeightedError { get; }
 
         public IActivator Activator { get; }
@@ -25,7 +29,15 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> Bias { get; }
 
-        public BasicStandardLayer(Matrix<double> weights, Matrix<double> bias, int batchSize, IActivator activator)
+        public IGradientAdjustmentParameters GradientAdjustmentParameters { get; }
+
+        public Matrix<double> WeightsGradient { get; }
+
+        public Matrix<double> BiasGradient { get; }
+
+
+        public BasicStandardLayer(Matrix<double> weights, Matrix<double> bias, int batchSize, IActivator activator, 
+            IGradientAdjustmentParameters gradientAdjustmentParameters)
         {
             BatchSize = batchSize;
             InputSize = weights.RowCount;
@@ -33,25 +45,35 @@ namespace NeuralNetwork.Layers
             Weights = Matrix<double>.Build.DenseOfMatrix(weights);
             Bias = Matrix<double>.Build.DenseOfMatrix(bias);
             NetInput = Matrix<double>.Build.Dense(LayerSize, BatchSize);
+            PreviousActivation = Matrix<double>.Build.Dense(InputSize, BatchSize);
             Activation = Matrix<double>.Build.Dense(LayerSize, BatchSize);
             Activator = activator;
+            GradientAdjustmentParameters = gradientAdjustmentParameters;
+            WeightedError = Matrix<double>.Build.Dense(InputSize, batchSize);
+            WeightsGradient = Matrix<double>.Build.Dense(InputSize, LayerSize);
+            BiasGradient = Matrix<double>.Build.Dense(LayerSize, 1);
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            throw new NotImplementedException();
+            upstreamWeightedErrors.PointwiseMultiply(NetInput.Map(Activator.ApplyDerivative), BiasGradient);
+            Weights.Multiply(BiasGradient, WeightedError);
+            PreviousActivation.Multiply(BiasGradient.Transpose(), WeightsGradient);
         }
-
 
         public void Propagate(Matrix<double> input)
         {
-            Weights.TransposeThisAndMultiply(input).Add(Bias, NetInput);
+            input.CopyTo(PreviousActivation);
+            Weights.TransposeThisAndMultiply(input, NetInput);
+            NetInput.Add(Bias, NetInput);
             NetInput.Map(Activator.Apply, Activation);
         }
 
         public void UpdateParameters()
         {
-            throw new NotImplementedException();
+            FixedLearningRateParameters learningRateParameters = GradientAdjustmentParameters as FixedLearningRateParameters;
+            Weights.Subtract(WeightsGradient.Multiply(learningRateParameters.LearningRate), Weights);
+            Bias.Subtract(BiasGradient.Multiply(learningRateParameters.LearningRate), Bias);
         }
     }
 }

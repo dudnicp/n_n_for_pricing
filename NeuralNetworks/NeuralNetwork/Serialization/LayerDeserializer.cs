@@ -29,7 +29,8 @@ namespace NeuralNetwork.Serialization
             var weights = Matrix<double>.Build.DenseOfArray(standardSerialized.Weights);
             var bias = Matrix<double>.Build.DenseOfColumnArrays(new double[][] { standardSerialized.Bias });
             var activator = ActivatorFactory.Build(standardSerialized.ActivatorType);
-            return new BasicStandardLayer(weights, bias, batchSize, activator);
+            var gradientAdjustmentParameters = standardSerialized.GradientAdjustmentParameters;
+            return new BasicStandardLayer(weights, bias, batchSize, activator, gradientAdjustmentParameters);
         }
     }
 }
