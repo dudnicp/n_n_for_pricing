@@ -10,20 +10,21 @@ using NeuralNetwork.Common.Layers;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using NeuralNetworkCreator.Services;
+using NeuralNetwork.Activators;
 
 namespace NeuralNetworkCreator.Model
 {
     public class LayerData : BindableBase
     {
-        private IActivator _activator;
+        private ActivatorType _activatorType;
         private IGradientAdjustmentParameters _gradientAdjustmentParameters;
         private int _layerSize;
         private LayerType _layerType;
 
-        public IActivator Activator
+        public ActivatorType ActivatorType
         {
-            get => _activator;
-            set => SetProperty(ref _activator, value);
+            get => _activatorType;
+            set => SetProperty(ref _activatorType, value);
         }
 
         public IGradientAdjustmentParameters GradientAdjustmentParameters
@@ -44,17 +45,12 @@ namespace NeuralNetworkCreator.Model
             set => SetProperty(ref _layerType, value);
         }
 
-        public ObservableCollection<IActivator> AviableActivators { get; }
-
-        public ObservableCollection<LayerType> AviableLayerTypes { get; }
-
-        public ObservableCollection<GradientAdjustmentType> AviableGradientAdjustmentTypes { get; }
-
         public LayerData()
         {
-            AviableActivators = new ObservableCollection<IActivator>(AviableActivatorsService.Activators);
-            AviableLayerTypes = new ObservableCollection<LayerType>(AviableLayerTypesService.Types);
-            AviableGradientAdjustmentTypes = new ObservableCollection<GradientAdjustmentType>(AviableGradientAdjustmentTypesService.Types);
+            ActivatorType = ActivatorType.Identity;
+            LayerSize = 1;
+            LayerType = LayerType.Standard;
+            GradientAdjustmentParameters = new FixedLearningRateParameters(1.0);
         }
     }
 }

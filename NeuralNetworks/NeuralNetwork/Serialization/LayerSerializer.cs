@@ -1,4 +1,5 @@
-﻿using NeuralNetwork.Common.Layers;
+﻿using NeuralNetwork.Common.Activators;
+using NeuralNetwork.Common.Layers;
 using NeuralNetwork.Common.Serialization;
 using NeuralNetwork.Layers;
 using System;

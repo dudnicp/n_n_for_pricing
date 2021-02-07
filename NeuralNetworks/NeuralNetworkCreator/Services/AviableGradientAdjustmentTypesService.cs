@@ -16,9 +16,9 @@ namespace NeuralNetworkCreator.Services
             {
                 if (_types == null)
                 {
+                    _types = new List<GradientAdjustmentType>();
                     foreach (GradientAdjustmentType type in (GradientAdjustmentType[])Enum.GetValues(typeof(GradientAdjustmentType)))
                     {
-                        _types = new List<GradientAdjustmentType>();
                         _types.Add(type);
                     }
                 }

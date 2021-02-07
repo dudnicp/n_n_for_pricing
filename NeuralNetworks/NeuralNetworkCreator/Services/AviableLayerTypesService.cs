@@ -17,9 +17,9 @@ namespace NeuralNetworkCreator.Services
             {
                 if (_types == null)
                 {
+                    _types = new List<LayerType>();
                     foreach (LayerType type in (LayerType[])Enum.GetValues(typeof(LayerType)))
                     {
-                        _types = new List<LayerType>();
                         _types.Add(type);
                     }
                 }

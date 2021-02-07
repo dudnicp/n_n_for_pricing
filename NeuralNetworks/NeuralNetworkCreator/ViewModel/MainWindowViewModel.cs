@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NeuralNetwork.Common.Activators;
+using NeuralNetwork.Common.GradientAdjustmentParameters;
+using NeuralNetwork.Common.Layers;
 using NeuralNetworkCreator.Model;
+using NeuralNetworkCreator.Services;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -22,8 +27,17 @@ namespace NeuralNetworkCreator.ViewModel
         public LayerData CurrentLayer
         {
             get => _currentLayer;
-            set => SetProperty(ref _currentLayer, value);
+            set
+            {
+                SetProperty(ref _currentLayer, value);
+                SaveLayerCommand.RaiseCanExecuteChanged();
+                RemoveLayerCommand.RaiseCanExecuteChanged();
+            }
         }
+
+        public ObservableCollection<ActivatorType> AviableActivators { get; }
+        public ObservableCollection<LayerType> AviableLayerTypes { get; }
+        public ObservableCollection<GradientAdjustmentType> AviableGradientAdjustmentTypes { get; }
 
         public DelegateCommand AddLayerCommand { get; }
         public DelegateCommand RemoveLayerCommand { get; }
@@ -35,6 +49,11 @@ namespace NeuralNetworkCreator.ViewModel
         public MainWindowViewModel()
         {
             Network = new NetworkData();
+
+            AviableActivators = new ObservableCollection<ActivatorType>(AviableActivatorsService.Activators);
+            AviableLayerTypes = new ObservableCollection<LayerType>(AviableLayerTypesService.Types);
+            AviableGradientAdjustmentTypes = new ObservableCollection<GradientAdjustmentType>(AviableGradientAdjustmentTypesService.Types);
+
             AddLayerCommand = new DelegateCommand(AddLayer);
             RemoveLayerCommand = new DelegateCommand(RemoveLayer, LayerNotNull);
             SaveLayerCommand = new DelegateCommand(SaveLayer, LayerNotNull);
@@ -48,7 +67,8 @@ namespace NeuralNetworkCreator.ViewModel
 
         public void RemoveLayer()
         {
-            throw new NotImplementedException();
+            Network.RemoveLayer(CurrentLayer);
+            CurrentLayer = null;
         }
 
         public void SaveLayer()
