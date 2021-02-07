@@ -7,7 +7,6 @@
   <ItemGroup>
     <Compile Remove="DataShuffler\**" />
     <Compile Remove="EvaluationFunctions\**" />
-    <Compile Remove="GradientAdjustments\**" />
     <Compile Remove="LossFunctions\**" />
     <Compile Remove="NetworkBuilders\**" />
     <Compile Remove="NetworkHandlers\**" />
@@ -15,7 +14,6 @@
     <Compile Remove="Utils\**" />
     <EmbeddedResource Remove="DataShuffler\**" />
     <EmbeddedResource Remove="EvaluationFunctions\**" />
-    <EmbeddedResource Remove="GradientAdjustments\**" />
     <EmbeddedResource Remove="LossFunctions\**" />
     <EmbeddedResource Remove="NetworkBuilders\**" />
     <EmbeddedResource Remove="NetworkHandlers\**" />
@@ -23,7 +21,6 @@
     <EmbeddedResource Remove="Utils\**" />
     <None Remove="DataShuffler\**" />
     <None Remove="EvaluationFunctions\**" />
-    <None Remove="GradientAdjustments\**" />
     <None Remove="LossFunctions\**" />
     <None Remove="NetworkBuilders\**" />
     <None Remove="NetworkHandlers\**" />

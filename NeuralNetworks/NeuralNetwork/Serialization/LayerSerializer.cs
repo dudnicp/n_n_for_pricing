@@ -24,7 +24,7 @@ namespace NeuralNetwork.Serialization
             var bias = standardLayer.Bias.ToColumnArrays()[0];
             var weights = standardLayer.Weights.ToArray();
             var activatorType = standardLayer.Activator.Type;
-            return new SerializedStandardLayer(bias, weights, activatorType, standardLayer.GradientAdjustmentParameters);
+            return new SerializedStandardLayer(bias, weights, activatorType, standardLayer.GradientAdjustmentStrategy.Parameters);
         }
     }
 }
