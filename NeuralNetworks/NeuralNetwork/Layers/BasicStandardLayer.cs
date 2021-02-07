@@ -8,7 +8,7 @@ using NeuralNetwork.Common.Serialization;
 
 namespace NeuralNetwork.Layers
 {
-    internal class BasicStandardLayer : ILayer
+    public class BasicStandardLayer : ILayer
     {
         public int LayerSize { get; }
 
@@ -71,7 +71,13 @@ namespace NeuralNetwork.Layers
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            GradientAdjustmentStrategy.BackPropagate(this, upstreamWeightedErrors);
+            // Bias
+            upstreamWeightedErrors.PointwiseMultiply(NetInput.Map(Activator.ApplyDerivative), BiasedError);
+            BiasedError.Multiply(OnesM, BiasGradient);
+
+            // Weights
+            Weights.Multiply(BiasedError, WeightedError);
+            PreviousActivation.Multiply(BiasedError.Transpose().Divide(BatchSize), WeightsGradient);
         }
 
         public void Propagate(Matrix<double> input)
@@ -84,7 +90,7 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
-            GradientAdjustmentStrategy.UpdateParameters(this);
+            GradientAdjustmentStrategy.UpdateWeightsAndBiases(this);
         }
     }
 }

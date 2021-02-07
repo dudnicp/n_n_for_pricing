@@ -18,29 +18,13 @@ namespace NeuralNetwork.GradientAdjustment
             _parameters = parameters;
         }
 
-        public void BackPropagate(ILayer layer, Matrix<double> upstreamWeightedErrors)
+        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
         {
-            var standardLayer = layer as BasicStandardLayer;
-            // Bias
-            upstreamWeightedErrors.PointwiseMultiply(standardLayer.NetInput.Map(standardLayer.Activator.ApplyDerivative), 
-                standardLayer.BiasedError);
-            standardLayer.BiasedError.Multiply(standardLayer.OnesM, standardLayer.BiasGradient);
-
-            // Weights
-            standardLayer.Weights.Multiply(standardLayer.BiasedError, standardLayer.WeightedError);
-            standardLayer.PreviousActivation.Multiply(standardLayer.BiasedError.Transpose().Divide(standardLayer.BatchSize), 
-                standardLayer.WeightsGradient);
-
-        }
-
-        public void UpdateParameters(ILayer layer)
-        {
-            var standardLayer = layer as BasicStandardLayer;
-            standardLayer.Weights.Subtract(standardLayer.WeightsGradient.Multiply(_parameters.LearningRate), standardLayer.Weights);
-            for (int i = 0; i < standardLayer.BatchSize; i++)
+            layer.Weights.Subtract(layer.WeightsGradient.Multiply(_parameters.LearningRate), layer.Weights);
+            layer.Bias.SetColumn(0, layer.Bias.Column(0).Subtract(layer.BiasGradient.Multiply(_parameters.LearningRate)));
+            for (int i = 1; i < layer.BatchSize; i++)
             {
-                standardLayer.Bias.SetColumn(i, standardLayer.Bias.Column(i).Subtract(
-                    standardLayer.BiasGradient.Multiply(_parameters.LearningRate)));
+                layer.Bias.SetColumn(i, layer.Bias.Column(0));
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using NeuralNetwork.Common.Layers;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
+using NeuralNetwork.Layers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,12 +18,7 @@ namespace NeuralNetwork.GradientAdjustment
             _parameters = parameters;
         }
 
-        public void BackPropagate(ILayer layer, Matrix<double> upstreamWeightedErrors)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateParameters(ILayer layer)
+        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
         {
             throw new NotImplementedException();
         }
