@@ -3,7 +3,7 @@ using System;
 
 namespace NeuralNetwork.Activators
 {
-    internal static class ActivatorFactory
+    public static class ActivatorFactory
     {
         public static IActivator Build(ActivatorType activatorType)
         {
