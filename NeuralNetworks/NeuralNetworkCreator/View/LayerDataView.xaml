@@ -5,8 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NeuralNetworkCreator.View"
              xmlns:dc="clr-namespace:NeuralNetworkCreator.ViewModel"
+             xmlns:param="clr-namespace:NeuralNetwork.Layers.AdditionalLayerParameters;assembly=NeuralNetwork"
+             xmlns:paramview="clr-namespace:NeuralNetworkCreator.View.Layer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type param:StandardParameters}">
+            <UserControl>
+                <paramview:StandardView/>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type param:DropoutParameters}">
+            <UserControl>
+                <paramview:DropoutView/>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type param:L2PenaltyParameters}">
+            <UserControl>
+                <paramview:L2PenaltyView/>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type param:WeightDecayParameters}">
+            <UserControl>
+                <paramview:WeightDecayView/>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type param:InputStandardizingParameters}">
+            <UserControl>
+                <paramview:InputStandardizingView/>
+            </UserControl>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -17,9 +46,9 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
                Content="Layer Data" FontSize="24" FontWeight="Bold"/>
@@ -31,7 +60,8 @@
                Content="Layer type" FontSize="12" FontWeight="SemiBold"/>
         <ComboBox x:Name="LayerTypesComboBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,2" VerticalContentAlignment="Center"
                   ItemsSource="{Binding AviableLayerTypes}" SelectedItem="{Binding CurrentLayer.LayerType}"/>
-        <!--Content Control : Layer Type Parameters-->
+        <ContentControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                        Content="{Binding CurrentLayer.AdditionalParameters}"/>
         <Button Grid.Row="5" Grid.Column="2" Margin="0,0,10,5" Content="Remove layer" VerticalContentAlignment="Center" 
                 Command="{Binding RemoveLayerCommand}"/>
     </Grid>

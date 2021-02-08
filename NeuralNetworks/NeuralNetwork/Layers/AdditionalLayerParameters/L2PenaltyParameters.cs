@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NeuralNetwork.Layers.AdditionalLayerParameters
 {
-    class L2PenaltyParameters : IAdditionalLayerParameters
+    public class L2PenaltyParameters : IAdditionalLayerParameters
     {
         public LayerType LayerType => LayerType.L2Penalty;
 

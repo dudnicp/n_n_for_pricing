@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NeuralNetworkCreator.View.Gradient
+namespace NeuralNetworkCreator.View.Layer
 {
     /// <summary>
-    /// Logique d'interaction pour EmptyView.xaml
+    /// Logique d'interaction pour WeightDecayView.xaml
     /// </summary>
-    public partial class EmptyView : UserControl
+    public partial class WeightDecayView : UserControl
     {
-        public EmptyView()
+        public WeightDecayView()
         {
             InitializeComponent();
         }

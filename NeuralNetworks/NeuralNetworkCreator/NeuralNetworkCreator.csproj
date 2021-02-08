@@ -68,10 +68,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Gradient\EmptyView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\Gradient\FixedLearningRateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +88,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Layer\DropoutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Layer\InputStandardizingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Layer\L2PenaltyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Layer\StandardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Layer\WeightDecayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -107,9 +123,6 @@
     <Compile Include="View\Gradient\AdamView.xaml.cs">
       <DependentUpon>AdamView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Gradient\EmptyView.xaml.cs">
-      <DependentUpon>EmptyView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\Gradient\FixedLearningRateView.xaml.cs">
       <DependentUpon>FixedLearningRateView.xaml</DependentUpon>
     </Compile>
@@ -124,6 +137,21 @@
     </Compile>
     <Compile Include="View\LayerListView.xaml.cs">
       <DependentUpon>LayerListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Layer\DropoutView.xaml.cs">
+      <DependentUpon>DropoutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Layer\InputStandardizingView.xaml.cs">
+      <DependentUpon>InputStandardizingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Layer\L2PenaltyView.xaml.cs">
+      <DependentUpon>L2PenaltyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Layer\StandardView.xaml.cs">
+      <DependentUpon>StandardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Layer\WeightDecayView.xaml.cs">
+      <DependentUpon>WeightDecayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -176,8 +204,6 @@
       <Name>NeuralNetwork</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\Layer\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

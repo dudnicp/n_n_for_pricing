@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using NeuralNetworkCreator.Services;
 using NeuralNetwork.Activators;
 using NeuralNetwork.GradientAdjustment;
+using NeuralNetwork.Layers.AdditionalLayerParameters;
 
 namespace NeuralNetworkCreator.Model
 {
@@ -19,6 +20,7 @@ namespace NeuralNetworkCreator.Model
     {
         private int _layerSize;
         private LayerType _layerType;
+        private IAdditionalLayerParameters _additionalParameters;
 
         public int LayerSize
         {
@@ -29,7 +31,17 @@ namespace NeuralNetworkCreator.Model
         public LayerType LayerType
         {
             get => _layerType;
-            set => SetProperty(ref _layerType, value);
+            set
+            {
+                SetProperty(ref _layerType, value);
+                AdditionalParameters = LayerParametersFactory.Build(LayerType);
+            }
+        }
+
+        public IAdditionalLayerParameters AdditionalParameters
+        {
+            get => _additionalParameters;
+            set => SetProperty(ref _additionalParameters, value);
         }
 
         public LayerData()

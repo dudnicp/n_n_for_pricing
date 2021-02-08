@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NeuralNetwork.Layers.AdditionalLayerParameters
 {
-    class WeightDecayParameters : IAdditionalLayerParameters
+    public class WeightDecayParameters : IAdditionalLayerParameters
     {
         public LayerType LayerType => LayerType.WeightDecay;
 

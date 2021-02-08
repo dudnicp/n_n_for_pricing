@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NeuralNetwork.Layers.AdditionalLayerParameters
 {
-    class InputStandardizingParameters : IAdditionalLayerParameters
+    public class InputStandardizingParameters : IAdditionalLayerParameters
     {
         public LayerType LayerType => LayerType.InputStandardizing;
 
