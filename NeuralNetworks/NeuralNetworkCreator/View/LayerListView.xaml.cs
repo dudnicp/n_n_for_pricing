@@ -12,22 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using NeuralNetworkCreator.ViewModel;
 
 namespace NeuralNetworkCreator.View
 {
     /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
+    /// Logique d'interaction pour LayerListView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LayerListView : UserControl
     {
-        public MainWindow()
+        public LayerListView()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
-            NetworkData.DataContext = DataContext;
-            LayerData.DataContext = DataContext;
-            LayerList.DataContext = DataContext;
         }
     }
 }

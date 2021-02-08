@@ -5,15 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NeuralNetworkCreator.View"
              xmlns:dc="clr-namespace:NeuralNetworkCreator.ViewModel"
+             xmlns:gradient="clr-namespace:NeuralNetwork.Common.GradientAdjustmentParameters;assembly=NeuralNetwork.Common"
+             xmlns:gradientview="clr-namespace:NeuralNetworkCreator.View.Gradient"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type gradient:FixedLearningRateParameters}">
+            <UserControl>
+                <gradientview:FixedLearningRateView/>
+            </UserControl>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type gradient:AdamParameters}">
+            <gradientview:AdamView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type gradient:MomentumParameters}">
+            <gradientview:MomentumView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type gradient:NesterovParameters}">
+            <gradientview:NesterovView/>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="12*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -21,30 +40,25 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Network" FontSize="28" FontWeight="Bold"/>
+               Content="Network" FontSize="24" FontWeight="Bold"/>
         <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Input size" FontSize="14" FontWeight="SemiBold"/>
-        <TextBox x:Name="InputSizeBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" VerticalContentAlignment="Center"
-                 Text="{Binding Network.InputSize, Mode=TwoWay}"/>
+               Content="Input size" FontSize="12" FontWeight="SemiBold"/>
+        <TextBox x:Name="InputSizeBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2,10,2" VerticalContentAlignment="Center"
+                 Text="{Binding Network.InputSize}"/>
         <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Batch size" FontSize="14" FontWeight="SemiBold"/>
-        <TextBox x:Name="BatchSizeBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" VerticalContentAlignment="Center"
-                 Text="{Binding Network.BatchSize, Mode=TwoWay}"/>
-        <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Layers" FontSize="18" FontWeight="SemiBold" FontStyle="Italic"/>
-        <Button Grid.Row="3" Grid.Column="2" Margin="5" Content="Add new layer" Command="{Binding AddLayerCommand}"/>
-        <ListBox x:Name="LayersBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="5"  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  ItemsSource="{Binding Network.Layers}" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=CurrentLayer}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="{Binding LayerType}"/>
-                        <Label Content="{Binding LayerSize}"/>
-                        <Label Content="{Binding ActivatorType}"/>
-                        <Label Content="{Binding GradientAdjustmentType}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+               Content="Batch size" FontSize="12" FontWeight="SemiBold"/>
+        <TextBox x:Name="BatchSizeBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2,10,2" VerticalContentAlignment="Center"
+                 Text="{Binding Network.BatchSize}"/>
+        <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+               Content="Activation function" FontSize="12" FontWeight="SemiBold"/>
+        <ComboBox x:Name="ActivatorsComboBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2,10,2" VerticalContentAlignment="Center"
+                  ItemsSource="{Binding AviableActivators}" SelectedItem="{Binding Network.ActivatorType}"/>
+        <Label Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+               Content="Gradient adjustment" FontSize="12" FontWeight="SemiBold"/>
+        <ComboBox x:Name="AviableGradientAdjustmentsComboBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2,10,2" VerticalContentAlignment="Center"
+                  ItemsSource="{Binding AviableGradientAdjustmentTypes}"
+                  SelectedItem="{Binding Network.GradientAdjustmentType}"/>
+        <ContentControl Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"
+            Content="{Binding Network.GradientAdjustmentParameters}"/>
     </Grid>
 </UserControl>

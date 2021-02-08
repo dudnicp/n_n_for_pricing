@@ -17,33 +17,8 @@ namespace NeuralNetworkCreator.Model
 {
     public class LayerData : BindableBase
     {
-        private ActivatorType _activatorType;
-        private GradientAdjustmentType _gradientAdjustmentType;
-        private IGradientAdjustmentParameters _gradientAdjustmentParameters;
         private int _layerSize;
         private LayerType _layerType;
-
-        public ActivatorType ActivatorType
-        {
-            get => _activatorType;
-            set => SetProperty(ref _activatorType, value);
-        }
-
-        public GradientAdjustmentType GradientAdjustmentType
-        {
-            get => _gradientAdjustmentType;
-            set
-            {
-                SetProperty(ref _gradientAdjustmentType, value);
-                GradientAdjustmentParameters = GradientAdjustmentParametersFactory.Build(GradientAdjustmentType);
-            }
-        }
-
-        public IGradientAdjustmentParameters GradientAdjustmentParameters
-        {
-            get => _gradientAdjustmentParameters;
-            set => SetProperty(ref _gradientAdjustmentParameters, value);
-        }
 
         public int LayerSize
         {
@@ -59,11 +34,8 @@ namespace NeuralNetworkCreator.Model
 
         public LayerData()
         {
-            ActivatorType = ActivatorType.Identity;
             LayerSize = 1;
             LayerType = LayerType.Standard;
-            GradientAdjustmentType = GradientAdjustmentType.FixedLearningRate;
-            GradientAdjustmentParameters = new FixedLearningRateParameters(1.0);
         }
     }
 }

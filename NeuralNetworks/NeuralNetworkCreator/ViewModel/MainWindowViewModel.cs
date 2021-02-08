@@ -48,8 +48,6 @@ namespace NeuralNetworkCreator.ViewModel
 
         public MainWindowViewModel()
         {
-            Network = new NetworkData();
-
             AviableActivators = new ObservableCollection<ActivatorType>(AviableActivatorsService.Activators);
             AviableLayerTypes = new ObservableCollection<LayerType>(AviableLayerTypesService.Types);
             AviableGradientAdjustmentTypes = new ObservableCollection<GradientAdjustmentType>(AviableGradientAdjustmentTypesService.Types);
@@ -58,6 +56,8 @@ namespace NeuralNetworkCreator.ViewModel
             RemoveLayerCommand = new DelegateCommand(RemoveLayer, LayerNotNull);
             SaveLayerCommand = new DelegateCommand(SaveLayer, LayerNotNull);
             SaveNetworkCommand = new DelegateCommand(SaveNetwork);
+
+            Network = new NetworkData();
         }
 
         public void AddLayer()

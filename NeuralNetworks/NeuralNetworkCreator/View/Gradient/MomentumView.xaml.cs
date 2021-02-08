@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NeuralNetworkCreator.View
+namespace NeuralNetworkCreator.View.Gradient
 {
     /// <summary>
-    /// Logique d'interaction pour EmptyView.xaml
+    /// Logique d'interaction pour MomentumView.xaml
     /// </summary>
-    public partial class EmptyView : UserControl
+    public partial class MomentumView : UserControl
     {
-        public EmptyView()
+        public MomentumView()
         {
             InitializeComponent();
         }

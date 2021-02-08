@@ -5,34 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NeuralNetworkCreator.View"
              xmlns:dc="clr-namespace:NeuralNetworkCreator.ViewModel"
-             xmlns:gradient="clr-namespace:NeuralNetwork.Common.GradientAdjustmentParameters;assembly=NeuralNetwork.Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <DataTemplate DataType="{x:Type gradient:FixedLearningRateParameters}">
-            <UserControl>
-                <local:FixedLearningRateView/>
-            </UserControl> 
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type gradient:AdamParameters}">
-            <local:EmptyView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type gradient:MomentumParameters}">
-            <local:EmptyView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type gradient:NesterovParameters}">
-            <local:EmptyView/>
-        </DataTemplate>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="5*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -41,30 +22,17 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Layer Data" FontSize="28" FontWeight="Bold"/>
+               Content="Layer Data" FontSize="24" FontWeight="Bold"/>
         <Label Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
                Content="Layer size" FontSize="12" FontWeight="SemiBold"/>
-        <TextBox x:Name="LayerSizeBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" VerticalContentAlignment="Center"
+        <TextBox x:Name="LayerSizeBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,2" VerticalContentAlignment="Center"
                  Text="{Binding CurrentLayer.LayerSize}"/>
         <Label Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Activation function" FontSize="12" FontWeight="SemiBold"/>
-        <ComboBox x:Name="ActivatorsComboBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" VerticalContentAlignment="Center"
-                  ItemsSource="{Binding AviableActivators}" SelectedItem="{Binding CurrentLayer.ActivatorType}"/>
-        <Label Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
                Content="Layer type" FontSize="12" FontWeight="SemiBold"/>
-        <ComboBox x:Name="LayerTypesComboBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" VerticalContentAlignment="Center"
+        <ComboBox x:Name="LayerTypesComboBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,2" VerticalContentAlignment="Center"
                   ItemsSource="{Binding AviableLayerTypes}" SelectedItem="{Binding CurrentLayer.LayerType}"/>
         <!--Content Control : Layer Type Parameters-->
-        <Label Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
-               Content="Gradient adjustment" FontSize="12" FontWeight="SemiBold"/>
-        <ComboBox x:Name="AviableGradientAdjustmentsComboBox" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="5,2" VerticalContentAlignment="Center"
-                  ItemsSource="{Binding AviableGradientAdjustmentTypes}" 
-                  SelectedItem="{Binding CurrentLayer.GradientAdjustmentType}"/>
-        <ContentControl Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3"
-            Content="{Binding CurrentLayer.GradientAdjustmentParameters}"/>
-        <Button Grid.Row="7" Grid.Column="1" Margin="10,5" Content="Remove layer" 
+        <Button Grid.Row="5" Grid.Column="2" Margin="0,0,10,5" Content="Remove layer" VerticalContentAlignment="Center" 
                 Command="{Binding RemoveLayerCommand}"/>
-        <Button Grid.Row="7" Grid.Column="2" Margin="10,5" Content="Save layer" 
-                Command="{Binding SaveLayerCommand}"/>
     </Grid>
 </UserControl>

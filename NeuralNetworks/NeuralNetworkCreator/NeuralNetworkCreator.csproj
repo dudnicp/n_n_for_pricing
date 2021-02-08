@@ -64,15 +64,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\EmptyView.xaml">
+    <Page Include="View\Gradient\AdamView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\FixedLearningRateView.xaml">
+    <Page Include="View\Gradient\EmptyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Gradient\FixedLearningRateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Gradient\MomentumView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Gradient\NesterovView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LayerDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LayerListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -88,14 +104,26 @@
     <Compile Include="Services\AviableGradientAdjustmentTypesService.cs" />
     <Compile Include="Services\AviableLayerTypesService.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="View\EmptyView.xaml.cs">
+    <Compile Include="View\Gradient\AdamView.xaml.cs">
+      <DependentUpon>AdamView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gradient\EmptyView.xaml.cs">
       <DependentUpon>EmptyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\FixedLearningRateView.xaml.cs">
+    <Compile Include="View\Gradient\FixedLearningRateView.xaml.cs">
       <DependentUpon>FixedLearningRateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gradient\MomentumView.xaml.cs">
+      <DependentUpon>MomentumView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Gradient\NesterovView.xaml.cs">
+      <DependentUpon>NesterovView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LayerDataView.xaml.cs">
       <DependentUpon>LayerDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LayerListView.xaml.cs">
+      <DependentUpon>LayerListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -148,6 +176,8 @@
       <Name>NeuralNetwork</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="View\Layer\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
