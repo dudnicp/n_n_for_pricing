@@ -64,7 +64,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="View\GradientAdjustmentsParametersView.xaml">
+    <Page Include="View\EmptyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FixedLearningRateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -84,8 +88,11 @@
     <Compile Include="Services\AviableGradientAdjustmentTypesService.cs" />
     <Compile Include="Services\AviableLayerTypesService.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="View\GradientAdjustmentsParametersView.xaml.cs">
-      <DependentUpon>GradientAdjustmentsParametersView.xaml</DependentUpon>
+    <Compile Include="View\EmptyView.xaml.cs">
+      <DependentUpon>EmptyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FixedLearningRateView.xaml.cs">
+      <DependentUpon>FixedLearningRateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LayerDataView.xaml.cs">
       <DependentUpon>LayerDataView.xaml</DependentUpon>

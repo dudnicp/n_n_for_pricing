@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace NeuralNetworkCreator.View
 {
     /// <summary>
-    /// Logique d'interaction pour GradientAdjustmentParametersView.xaml
+    /// Logique d'interaction pour EmptyView.xaml
     /// </summary>
-    public partial class GradientAdjustmentsParametersView : UserControl
+    public partial class EmptyView : UserControl
     {
-        public GradientAdjustmentsParametersView()
+        public EmptyView()
         {
             InitializeComponent();
         }

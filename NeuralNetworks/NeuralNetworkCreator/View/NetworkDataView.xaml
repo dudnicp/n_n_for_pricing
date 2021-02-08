@@ -34,14 +34,14 @@
                Content="Layers" FontSize="18" FontWeight="SemiBold" FontStyle="Italic"/>
         <Button Grid.Row="3" Grid.Column="2" Margin="5" Content="Add new layer" Command="{Binding AddLayerCommand}"/>
         <ListBox x:Name="LayersBox" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="5"  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  ItemsSource="{Binding Network.Layers}" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=CurrentLayer, Mode=TwoWay}">
+                  ItemsSource="{Binding Network.Layers}" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding Path=CurrentLayer}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="{Binding LayerType}"/>
                         <Label Content="{Binding LayerSize}"/>
                         <Label Content="{Binding ActivatorType}"/>
-                        <Label Content="{Binding GradientAdjustmentParameters.Type}"/>
+                        <Label Content="{Binding GradientAdjustmentType}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
