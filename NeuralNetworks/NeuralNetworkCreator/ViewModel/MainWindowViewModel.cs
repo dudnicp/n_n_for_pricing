@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using NeuralNetwork.Common.Activators;
 using NeuralNetwork.Common.GradientAdjustmentParameters;
 using NeuralNetwork.Common.Layers;
 using NeuralNetworkCreator.Model;
 using NeuralNetworkCreator.Services;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -70,7 +74,16 @@ namespace NeuralNetworkCreator.ViewModel
 
         public void SaveNetwork()
         {
-            throw new NotImplementedException();
+            using (var dialog = new SaveFileDialog())
+            {
+                dialog.InitialDirectory = ConfigurationManager.AppSettings["AbsoluteOutputPath"];
+                var result = dialog.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    var serializedContent = JsonConvert.SerializeObject(NetworkSerializer.Serialize(Network));
+                    File.WriteAllText($"{dialog.FileName}.json", serializedContent);
+                }
+            }
         }
     }
 }

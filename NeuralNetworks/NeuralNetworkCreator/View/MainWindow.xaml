@@ -35,6 +35,6 @@
                 <local:LayerDataView/>
             </UserControl>
         </Border>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Save network"/>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Content="Save network" Command="{Binding SaveNetworkCommand}"/>
     </Grid>
 </Window>

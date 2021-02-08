@@ -68,7 +68,7 @@ namespace NeuralNetworkCreator.Services
                 1.09658178e+00, 3.00538796e-02, 3.58017618e-01 }; // nice hard encoding :smirk:
             double[] stdDev = { 4.05251300e+01, 2.58158032e+00, 6.59942893e+01, 7.90843930e-02,
                 5.62299193e-01, 5.79778757e-03, 8.51935671e-02 };
-            var underlying = SerializeInputStandardizingLayer(layer, nextLayerSize, inputSize, activator,
+            var underlying = SerializeStandardLayer(layer, nextLayerSize, inputSize, activator,
                 gradientAdjustmentParameter, rng);
             return new SerializedInputStandardizingLayer(underlying, mean, stdDev);
         }
@@ -84,7 +84,7 @@ namespace NeuralNetworkCreator.Services
             ActivatorType activator, IGradientAdjustmentParameters gradientAdjustmentParameter, Random rng)
         {
             var additionalParameters = layer.AdditionalParameters as L2PenaltyParameters;
-            var underlying = SerializeInputStandardizingLayer(layer, nextLayerSize, inputSize, activator, 
+            var underlying = SerializeStandardLayer(layer, nextLayerSize, inputSize, activator, 
                 gradientAdjustmentParameter, rng);
             return new SerializedL2PenaltyLayer(underlying, additionalParameters.PenaltyCoefficient);
         }
@@ -93,7 +93,7 @@ namespace NeuralNetworkCreator.Services
             ActivatorType activator, IGradientAdjustmentParameters gradientAdjustmentParameter, Random rng)
         {
             var additionalParameters = layer.AdditionalParameters as WeightDecayParameters;
-            var underlying = SerializeInputStandardizingLayer(layer, nextLayerSize, inputSize, activator,
+            var underlying = SerializeStandardLayer(layer, nextLayerSize, inputSize, activator,
                 gradientAdjustmentParameter, rng);
             return new SerializedL2PenaltyLayer(underlying, additionalParameters.DecayRate);
         }
