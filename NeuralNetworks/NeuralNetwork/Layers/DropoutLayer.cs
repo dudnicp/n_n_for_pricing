@@ -18,9 +18,13 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> WeightedError { get; }
 
-        public DropoutLayer()
-        {
+        public double KeepProbability { get; }
 
+        public DropoutLayer(int layerSize, double probability, int batchSize)
+        {
+            LayerSize = layerSize;
+            KeepProbability = probability;
+            BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)

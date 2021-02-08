@@ -18,9 +18,17 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> WeightedError { get; }
 
-        public InputStandardizingLayer()
-        {
+        public ILayer UnderlyingLayer { get; }
 
+        public Vector<double> Mean { get; }
+
+        public Vector<double> StdDev { get; }
+
+        public InputStandardizingLayer(ILayer underlyingLayer, double[] mean, double[] stdDev)
+        {
+            UnderlyingLayer = underlyingLayer;
+            Mean = Vector<double>.Build.DenseOfArray(mean);
+            StdDev = Vector<double>.Build.DenseOfArray(stdDev);
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)

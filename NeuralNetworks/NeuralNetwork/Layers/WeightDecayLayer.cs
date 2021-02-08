@@ -18,9 +18,14 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> WeightedError { get; }
 
-        public WeightDecayLayer()
-        {
+        public ILayer UnderlyingLayer { get; }
 
+        public double DecayRate { get; }
+
+        public WeightDecayLayer(ILayer underlyingLayer, double decay)
+        {
+            UnderlyingLayer = underlyingLayer;
+            DecayRate = decay;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)

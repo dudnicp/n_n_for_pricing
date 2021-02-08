@@ -18,9 +18,14 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> WeightedError { get; }
 
-        public L2PenaltyLayer()
-        {
+        public ILayer UnderlyingLayer { get; }
 
+        public double PenaltyCoefficient { get; }
+
+        public L2PenaltyLayer(ILayer underlyingLayer, double penalty)
+        {
+            UnderlyingLayer = underlyingLayer;
+            PenaltyCoefficient = penalty;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
