@@ -64,8 +64,8 @@ namespace NeuralNetworkCreator.Model
 
         public NetworkData()
         {
-            BatchSize = 0;
-            InputSize = 0;
+            BatchSize = 1;
+            InputSize = 1;
             Layers = new ObservableCollection<LayerData>();
             GradientAdjustmentType = GradientAdjustmentType.FixedLearningRate;
             ActivatorType = ActivatorType.Identity;

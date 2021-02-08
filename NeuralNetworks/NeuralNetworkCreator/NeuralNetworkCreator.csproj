@@ -119,6 +119,8 @@
     <Compile Include="Services\AviableActivatorsService.cs" />
     <Compile Include="Services\AviableGradientAdjustmentTypesService.cs" />
     <Compile Include="Services\AviableLayerTypesService.cs" />
+    <Compile Include="Services\LayerSerializer.cs" />
+    <Compile Include="Services\NetworkSerializer.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\Gradient\AdamView.xaml.cs">
       <DependentUpon>AdamView.xaml</DependentUpon>

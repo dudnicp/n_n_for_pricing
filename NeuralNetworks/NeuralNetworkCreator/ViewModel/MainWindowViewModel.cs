@@ -30,7 +30,6 @@ namespace NeuralNetworkCreator.ViewModel
             set
             {
                 SetProperty(ref _currentLayer, value);
-                SaveLayerCommand.RaiseCanExecuteChanged();
                 RemoveLayerCommand.RaiseCanExecuteChanged();
             }
         }
@@ -41,7 +40,6 @@ namespace NeuralNetworkCreator.ViewModel
 
         public DelegateCommand AddLayerCommand { get; }
         public DelegateCommand RemoveLayerCommand { get; }
-        public DelegateCommand SaveLayerCommand { get; }
         public DelegateCommand SaveNetworkCommand { get; }
 
         private bool LayerNotNull() => CurrentLayer != null;
@@ -54,7 +52,6 @@ namespace NeuralNetworkCreator.ViewModel
 
             AddLayerCommand = new DelegateCommand(AddLayer);
             RemoveLayerCommand = new DelegateCommand(RemoveLayer, LayerNotNull);
-            SaveLayerCommand = new DelegateCommand(SaveLayer, LayerNotNull);
             SaveNetworkCommand = new DelegateCommand(SaveNetwork);
 
             Network = new NetworkData();
@@ -69,11 +66,6 @@ namespace NeuralNetworkCreator.ViewModel
         {
             Network.RemoveLayer(CurrentLayer);
             CurrentLayer = null;
-        }
-
-        public void SaveLayer()
-        {
-            throw new NotImplementedException();
         }
 
         public void SaveNetwork()
