@@ -22,10 +22,11 @@ namespace NeuralNetwork.Layers
 
         public double PenaltyCoefficient { get; }
 
-        public L2PenaltyLayer(ILayer underlyingLayer, double penalty)
+        public L2PenaltyLayer(ILayer underlyingLayer, double penalty, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
             PenaltyCoefficient = penalty;
+            BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)

@@ -22,10 +22,11 @@ namespace NeuralNetwork.Layers
 
         public double DecayRate { get; }
 
-        public WeightDecayLayer(ILayer underlyingLayer, double decay)
+        public WeightDecayLayer(ILayer underlyingLayer, double decay, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
             DecayRate = decay;
+            BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)

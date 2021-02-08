@@ -24,11 +24,12 @@ namespace NeuralNetwork.Layers
 
         public Vector<double> StdDev { get; }
 
-        public InputStandardizingLayer(ILayer underlyingLayer, double[] mean, double[] stdDev)
+        public InputStandardizingLayer(ILayer underlyingLayer, double[] mean, double[] stdDev, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
             Mean = Vector<double>.Build.DenseOfArray(mean);
             StdDev = Vector<double>.Build.DenseOfArray(stdDev);
+            BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
