@@ -11,7 +11,11 @@ namespace NeuralNetwork.GradientAdjustment
     public interface IGradientAdjustmentStrategy
     {
         IGradientAdjustmentParameters Parameters { get; }
+        Matrix<double> WeightsVelocity { get; set; }
+        Vector<double> BiasVelocity { get; set; }
 
-        void UpdateWeightsAndBiases(BasicStandardLayer layer);
+        void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient);
+
+        void Init(int rowCount, int columnCount);
     }
 }

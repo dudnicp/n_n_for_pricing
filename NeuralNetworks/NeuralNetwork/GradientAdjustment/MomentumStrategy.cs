@@ -10,39 +10,36 @@ namespace NeuralNetwork.GradientAdjustment
 {
     public class MomentumStrategy : IGradientAdjustmentStrategy
     {
-        private MomentumParameters _parameters;
+        private MomentumParameters Momentum { get; }
 
-        private Matrix<double> _weightsVelocity;
+        public Matrix<double> WeightsVelocity { get; set; }
+        public Vector<double> BiasVelocity { get; set; }
 
-        private Vector<double> _biasVelocity;
+        public IGradientAdjustmentParameters Parameters => Momentum;
 
-        public IGradientAdjustmentParameters Parameters => _parameters;
-
-        public MomentumStrategy(MomentumParameters parameters)
+        public MomentumStrategy(MomentumParameters momentumParameters)
         {
-            _parameters = parameters;
+            Momentum = momentumParameters;
         }
 
-        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
+        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
-            // creating velocities if not already created
-            if (_weightsVelocity == null)
+            if (WeightsVelocity == null)
             {
-                _weightsVelocity = Matrix<double>.Build.Dense(layer.InputSize, layer.LayerSize);
-                _biasVelocity = Vector<double>.Build.Dense(layer.LayerSize);
+                Init(weightsGradient.RowCount, weightsGradient.ColumnCount);
             }
 
-            // updating velocities
-            _weightsVelocity.Multiply(_parameters.Momentum).Subtract(layer.Weights.Multiply(_parameters.LearningRate), _weightsVelocity);
-            _biasVelocity.Multiply(_parameters.Momentum).Subtract(layer.Bias.Column(0).Multiply(_parameters.LearningRate), _biasVelocity);
+            // Velocity update
+            WeightsVelocity.Multiply(Momentum.Momentum, WeightsVelocity); // v <- v * delta
+            WeightsVelocity.Subtract(weightsGradient.Multiply(Momentum.LearningRate), WeightsVelocity); // v <- v - eta * g
+            BiasVelocity.Multiply(Momentum.Momentum, BiasVelocity);
+            BiasVelocity.Subtract(biasGradient.Multiply(Momentum.LearningRate), BiasVelocity);
+        }
 
-            // updating parameters
-            layer.Weights.Add(_weightsVelocity, layer.Weights);
-            layer.Bias.SetColumn(0, layer.Bias.Column(0).Add(_biasVelocity));
-            for (int i = 1; i < layer.BatchSize; i++)
-            {
-                layer.Bias.SetColumn(i, layer.Bias.Column(0));
-            }
+        public void Init(int rowCount, int columnCount)
+        {
+            WeightsVelocity = Matrix<double>.Build.Dense(rowCount, columnCount);
+            BiasVelocity = Vector<double>.Build.Dense(columnCount);
         }
     }
 }

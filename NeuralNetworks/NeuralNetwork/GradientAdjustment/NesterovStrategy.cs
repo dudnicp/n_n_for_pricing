@@ -10,17 +10,36 @@ namespace NeuralNetwork.GradientAdjustment
 {
     public class NesterovStrategy : IGradientAdjustmentStrategy
     {
-        private NesterovParameters _parameters;
-        public IGradientAdjustmentParameters Parameters => _parameters;
+        private NesterovParameters Nesterov;
 
-        public NesterovStrategy(NesterovParameters parameters)
+        public Matrix<double> WeightsVelocity { get; set; }
+        public Vector<double> BiasVelocity { get; set; }
+
+        public IGradientAdjustmentParameters Parameters => Nesterov;
+
+        public NesterovStrategy(NesterovParameters nesterovParameters)
         {
-            _parameters = parameters;
+            Nesterov = nesterovParameters;
         }
 
-        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
+        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
-            throw new NotImplementedException();
+            if (WeightsVelocity == null)
+            {
+                Init(weightsGradient.RowCount, weightsGradient.ColumnCount);
+            }
+
+            // Velocity update
+            WeightsVelocity.Multiply(Nesterov.Momentum, WeightsVelocity); // v <- v * delta
+            WeightsVelocity.Subtract(weightsGradient.Multiply(Nesterov.LearningRate), WeightsVelocity); // v <- v - eta * g
+            BiasVelocity.Multiply(Nesterov.Momentum, BiasVelocity);
+            BiasVelocity.Subtract(biasGradient.Multiply(Nesterov.LearningRate), BiasVelocity);
+        }
+
+        public void Init(int rowCount, int columnCount)
+        {
+            WeightsVelocity = Matrix<double>.Build.Dense(rowCount, columnCount);
+            BiasVelocity = Vector<double>.Build.Dense(columnCount);
         }
     }
 }

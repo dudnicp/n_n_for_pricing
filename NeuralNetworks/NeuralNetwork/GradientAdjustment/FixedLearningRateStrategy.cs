@@ -10,22 +10,26 @@ namespace NeuralNetwork.GradientAdjustment
 {
     public class FixedLearningRateStrategy : IGradientAdjustmentStrategy
     {
-        private FixedLearningRateParameters _parameters;
-        public IGradientAdjustmentParameters Parameters => _parameters;
+        private FixedLearningRateParameters fixedLearningRate;
+        public IGradientAdjustmentParameters Parameters => fixedLearningRate;
 
-        public FixedLearningRateStrategy(FixedLearningRateParameters parameters)
+        public Matrix<double> WeightsVelocity { get; set; }
+        public Vector<double> BiasVelocity { get; set; }
+
+        public FixedLearningRateStrategy(FixedLearningRateParameters fixedLearningRateParameters)
         {
-            _parameters = parameters;
+            fixedLearningRate = fixedLearningRateParameters;
         }
 
-        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
+        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
-            layer.Weights.Subtract(layer.WeightsGradient.Multiply(_parameters.LearningRate), layer.Weights);
-            layer.Bias.SetColumn(0, layer.Bias.Column(0).Subtract(layer.BiasGradient.Multiply(_parameters.LearningRate)));
-            for (int i = 1; i < layer.BatchSize; i++)
-            {
-                layer.Bias.SetColumn(i, layer.Bias.Column(0));
-            }
+            weightsGradient.Multiply(-fixedLearningRate.LearningRate, WeightsVelocity);
+            biasGradient.Multiply(-fixedLearningRate.LearningRate, BiasVelocity);
+        }
+
+        public void Init(int rowCount, int columnCount)
+        {
+            throw new NotImplementedException();
         }
     }
 }

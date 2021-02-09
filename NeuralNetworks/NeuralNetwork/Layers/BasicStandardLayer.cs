@@ -90,7 +90,14 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
-            GradientAdjustmentStrategy.UpdateWeightsAndBiases(this);
+            GradientAdjustmentStrategy.UpdateVelocity(WeightsGradient, BiasGradient);
+
+            Weights.Add(GradientAdjustmentStrategy.WeightsVelocity, Weights);
+            Bias.SetColumn(0, Bias.Column(0).Add(GradientAdjustmentStrategy.BiasVelocity));
+            for (int i = 1; i < BatchSize; i++)
+            {
+                Bias.SetColumn(i, Bias.Column(0));
+            }
         }
     }
 }
