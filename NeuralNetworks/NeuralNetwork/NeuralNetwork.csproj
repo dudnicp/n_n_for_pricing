@@ -7,7 +7,6 @@
   <ItemGroup>
     <Compile Remove="DataShuffler\**" />
     <Compile Remove="EvaluationFunctions\**" />
-    <Compile Remove="GradientAdjustments\**" />
     <Compile Remove="LossFunctions\**" />
     <Compile Remove="NetworkBuilders\**" />
     <Compile Remove="NetworkHandlers\**" />
@@ -15,7 +14,6 @@
     <Compile Remove="Utils\**" />
     <EmbeddedResource Remove="DataShuffler\**" />
     <EmbeddedResource Remove="EvaluationFunctions\**" />
-    <EmbeddedResource Remove="GradientAdjustments\**" />
     <EmbeddedResource Remove="LossFunctions\**" />
     <EmbeddedResource Remove="NetworkBuilders\**" />
     <EmbeddedResource Remove="NetworkHandlers\**" />
@@ -23,7 +21,6 @@
     <EmbeddedResource Remove="Utils\**" />
     <None Remove="DataShuffler\**" />
     <None Remove="EvaluationFunctions\**" />
-    <None Remove="GradientAdjustments\**" />
     <None Remove="LossFunctions\**" />
     <None Remove="NetworkBuilders\**" />
     <None Remove="NetworkHandlers\**" />
@@ -33,15 +30,8 @@
 
   <ItemGroup>
     <Compile Remove="AssemblyInternals.cs" />
-    <Compile Remove="Layers\DropoutLayer.cs" />
     <Compile Remove="Layers\ILayerWithMode.cs" />
     <Compile Remove="Layers\ILayerWithStorage.cs" />
-    <Compile Remove="Layers\InputStandardizingLayer.cs" />
-    <Compile Remove="Layers\L2PenaltyLayer.cs" />
-    <Compile Remove="Layers\WeightDecayLayer.cs" />
-    <Compile Remove="Serialization\ILayerSerializer.cs" />
-    <Compile Remove="Serialization\LayerSerializer.cs" />
-    <Compile Remove="Serialization\NetworkSerializer.cs" />
   </ItemGroup>
 
   <ItemGroup>

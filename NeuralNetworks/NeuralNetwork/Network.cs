@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
+using NeuralNetwork.Common.Serialization;
 using System;
 
 namespace NeuralNetwork

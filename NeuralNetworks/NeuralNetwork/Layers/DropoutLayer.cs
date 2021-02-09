@@ -1,91 +1,45 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
-using NeuralNetwork.Storage;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace NeuralNetwork.Layers
 {
-    internal class DropoutLayer : ILayerWithMode, ILayerWithStorage, IEquatable<DropoutLayer>
+    class DropoutLayer : ILayer
     {
-        private int batchSize;
-        private Mode mode;
-        public double KeepProbability { get; }
-        public IMatrixStorage MatrixStorage { get; }
-        public IDropoutMask Mask { get; }
-
         public int LayerSize { get; }
 
         public int InputSize { get; }
 
-        public Mode Mode
+        public int BatchSize { get; set; }
+
+        public Matrix<double> Activation { get; }
+
+        public Matrix<double> WeightedError { get; }
+
+        public double KeepProbability { get; }
+
+        public DropoutLayer(int layerSize, double probability, int batchSize)
         {
-            get => mode;
-            set
-            {
-                mode = value;
-            }
-        }
-
-        public int BatchSize
-        {
-            get => batchSize;
-            set
-            {
-                batchSize = value;
-                Mask.Resize(value);
-                MatrixStorage.BatchSize = value;
-            }
-        }
-
-        public Matrix<double> Activation => MatrixStorage.Activation;
-
-        public Matrix<double> WeightedError => MatrixStorage.WeightedError;
-
-        internal DropoutLayer(IDropoutMask mask, int batchSize)
-        {
-            Mask = mask;
-            LayerSize = Mask.LayerSize;
-            InputSize = mask.LayerSize;
-            var dummyWeights = Matrix<double>.Build.Dense(InputSize, LayerSize);
-            var dummyBias = Matrix<double>.Build.Dense(InputSize, 1);
-            MatrixStorage = new MatrixStorage(dummyWeights, dummyBias, batchSize);
+            LayerSize = layerSize;
+            KeepProbability = probability;
             BatchSize = batchSize;
-            KeepProbability = mask.KeepProbability;
         }
-
-        public DropoutLayer(int layerSize, int batchSize, Random rng, double keepProbability) :
-            this(new DropoutMask(rng, layerSize, keepProbability), batchSize)
-        { }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            Mask.Value.PointwiseMultiply(upstreamWeightedErrors, MatrixStorage.WeightedError);
-        }
-
-        public void UpdateParameters()
-        {
-            //ntbd
-        }
-
-        public bool Equals(DropoutLayer other)
-        {
-            var sameTrainingBatchSize = BatchSize == other.BatchSize;
-            var sameInputSize = InputSize == other.InputSize;
-            var sameLayerSize = LayerSize == other.LayerSize;
-            var sameProbability = KeepProbability == other.KeepProbability;
-            return sameTrainingBatchSize && sameInputSize && sameLayerSize && sameProbability;
-        }
-
-        public bool Equals(ILayer other)
-        {
-            return other is DropoutLayer tstOther && Equals(tstOther);
+            throw new NotImplementedException();
         }
 
         public void Propagate(Matrix<double> input)
         {
-            Mask.Update(Mode);
-            input.PointwiseMultiply(Mask.Value, MatrixStorage.Activation);
+            throw new NotImplementedException();
+        }
+
+        public void UpdateParameters()
+        {
+            throw new NotImplementedException();
         }
     }
 }
