@@ -8,9 +8,9 @@ namespace NeuralNetwork.Layers
 {
     class InputStandardizingLayer : ILayer
     {
-        public int LayerSize { get; }
+        public int LayerSize => UnderlyingLayer.LayerSize;
 
-        public int InputSize { get; }
+        public int InputSize => UnderlyingLayer.InputSize;
 
         public int BatchSize { get; set; }
 
@@ -26,11 +26,11 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> StandardizedInput { get; }
 
-        public InputStandardizingLayer(BasicStandardLayer underlyingLayer, double[] mean, double[] stdDev, int batchSize)
+        public InputStandardizingLayer(BasicStandardLayer underlyingLayer, Matrix<double> mean, Matrix<double> stdDev, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
-            Mean = Matrix<double>.Build.DenseOfColumnArrays(new double[][] { mean });
-            StdDev = Matrix<double>.Build.DenseOfColumnArrays(new double[][] { stdDev });
+            Mean = mean;
+            StdDev = stdDev;
             BatchSize = batchSize;
             StandardizedInput = Matrix<double>.Build.Dense(Mean.RowCount, Mean.ColumnCount); 
         }

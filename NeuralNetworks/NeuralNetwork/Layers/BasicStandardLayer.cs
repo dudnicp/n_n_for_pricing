@@ -50,8 +50,8 @@ namespace NeuralNetwork.Layers
             LayerSize = weights.ColumnCount;
 
             // Propagation
-            Weights = Matrix<double>.Build.DenseOfMatrix(weights);
-            Bias = Matrix<double>.Build.DenseOfMatrix(bias);
+            Weights = weights;
+            Bias = bias;
             NetInput = Matrix<double>.Build.Dense(LayerSize, BatchSize);
             PreviousActivation = Matrix<double>.Build.Dense(InputSize, BatchSize);
             Activation = Matrix<double>.Build.Dense(LayerSize, BatchSize);

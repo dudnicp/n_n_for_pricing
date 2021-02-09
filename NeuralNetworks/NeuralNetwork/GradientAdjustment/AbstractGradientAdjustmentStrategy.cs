@@ -18,6 +18,11 @@ namespace NeuralNetwork.GradientAdjustment
 
         public virtual void BackPropagate(BasicStandardLayer layer, Matrix<double> upstreamWeightedError)
         {
+            if (WeightsVelocity == null)
+            {
+                Init(layer.Weights.RowCount, layer.Weights.ColumnCount);
+            }
+
             // Bias
             upstreamWeightedError.PointwiseMultiply(layer.NetInput.Map(layer.Activator.ApplyDerivative), layer.BiasedError);
             layer.BiasedError.Multiply(layer.OnesM, layer.BiasGradient);

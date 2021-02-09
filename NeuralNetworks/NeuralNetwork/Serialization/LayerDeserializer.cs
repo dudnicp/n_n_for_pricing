@@ -38,7 +38,11 @@ namespace NeuralNetwork.Serialization
         private static ILayer DeserializeStandardLayer(SerializedStandardLayer serializedStandard, int batchSize)
         {
             var weights = Matrix<double>.Build.DenseOfArray(serializedStandard.Weights);
-            var bias = Matrix<double>.Build.DenseOfColumnArrays(new double[][] { serializedStandard.Bias });
+            var bias = Matrix<double>.Build.Dense(serializedStandard.Bias.Length, batchSize);
+            for (int i = 0; i < bias.ColumnCount; i++)
+            {
+                bias.SetColumn(i, serializedStandard.Bias);
+            }
             var activator = ActivatorFactory.Build(serializedStandard.ActivatorType);
             var gradientAdjustmentParameters = serializedStandard.GradientAdjustmentParameters;
             return new BasicStandardLayer(weights, bias, batchSize, activator, gradientAdjustmentParameters);
@@ -47,8 +51,16 @@ namespace NeuralNetwork.Serialization
         private static ILayer DeserializeInputStandardizedLayer(SerializedInputStandardizingLayer serializedInputStandardized, int batchSize)
         {
             var underlying = Deserialize(serializedInputStandardized.UnderlyingSerializedLayer, batchSize) as BasicStandardLayer;
-            var mean = serializedInputStandardized.Mean;
-            var stdDev = serializedInputStandardized.StdDev;
+            var mean = Matrix<double>.Build.Dense(serializedInputStandardized.Mean.Length, batchSize);
+            for (int i = 0; i < mean.ColumnCount; i++)
+            {
+                mean.SetColumn(i, serializedInputStandardized.Mean);
+            }
+            var stdDev = Matrix<double>.Build.Dense(serializedInputStandardized.StdDev.Length, batchSize);
+            for (int i = 0; i < mean.ColumnCount; i++)
+            {
+                stdDev.SetColumn(i, serializedInputStandardized.StdDev);
+            }
             return new InputStandardizingLayer(underlying, mean, stdDev, batchSize);
         }
 

@@ -8,9 +8,9 @@ namespace NeuralNetwork.Layers
 {
     class L2PenaltyLayer : ILayer
     {
-        public int LayerSize { get; }
+        public int LayerSize => UnderlyingLayer.LayerSize;
 
-        public int InputSize { get; }
+        public int InputSize => UnderlyingLayer.InputSize;
 
         public int BatchSize { get; set; }
 
