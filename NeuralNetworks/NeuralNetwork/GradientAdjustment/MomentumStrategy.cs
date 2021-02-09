@@ -8,21 +8,18 @@ using System.Text;
 
 namespace NeuralNetwork.GradientAdjustment
 {
-    public class MomentumStrategy : IGradientAdjustmentStrategy
+    public class MomentumStrategy : AbstractGradientAdjustmentStrategy
     {
         private MomentumParameters Momentum { get; }
 
-        public Matrix<double> WeightsVelocity { get; set; }
-        public Vector<double> BiasVelocity { get; set; }
-
-        public IGradientAdjustmentParameters Parameters => Momentum;
+        public override IGradientAdjustmentParameters Parameters => Momentum;
 
         public MomentumStrategy(MomentumParameters momentumParameters)
         {
             Momentum = momentumParameters;
         }
 
-        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
+        protected override void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
             if (WeightsVelocity == null)
             {
@@ -34,12 +31,6 @@ namespace NeuralNetwork.GradientAdjustment
             WeightsVelocity.Subtract(weightsGradient.Multiply(Momentum.LearningRate), WeightsVelocity); // v <- v - eta * g
             BiasVelocity.Multiply(Momentum.Momentum, BiasVelocity);
             BiasVelocity.Subtract(biasGradient.Multiply(Momentum.LearningRate), BiasVelocity);
-        }
-
-        public void Init(int rowCount, int columnCount)
-        {
-            WeightsVelocity = Matrix<double>.Build.Dense(rowCount, columnCount);
-            BiasVelocity = Vector<double>.Build.Dense(columnCount);
         }
     }
 }

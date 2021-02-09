@@ -8,15 +8,12 @@ using System.Text;
 
 namespace NeuralNetwork.GradientAdjustment
 {
-    public class AdamStrategy : IGradientAdjustmentStrategy
+    public class AdamStrategy : AbstractGradientAdjustmentStrategy
     {
         private AdamParameters Adam { get; }
-        public IGradientAdjustmentParameters Parameters => Adam;
+        public override IGradientAdjustmentParameters Parameters => Adam;
 
         private int TrainingStep { get; set; }
-
-        public Matrix<double> WeightsVelocity { get; set; }
-        public Vector<double> BiasVelocity { get; set; }
 
         private Matrix<double> FirstMomentWeights { get; set; }
         private Vector<double> FirstMomentBias { get; set; }
@@ -35,7 +32,7 @@ namespace NeuralNetwork.GradientAdjustment
             Adam = adamParameters;
         }
 
-        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
+        protected override void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
             if (WeightsVelocity == null)
             {
@@ -77,10 +74,10 @@ namespace NeuralNetwork.GradientAdjustment
             BiasVelocity.Subtract(BiasVelocityUpdate); // v <- v - v'
         }
 
-        public void Init(int rowCount, int columnCount)
+        protected override void Init(int rowCount, int columnCount)
         {
+            base.Init(rowCount, columnCount);
             TrainingStep = 1;
-
             WeightsVelocity = Matrix<double>.Build.Dense(rowCount, columnCount);
             BiasVelocity = Vector<double>.Build.Dense(columnCount);
             FirstMomentWeights = Matrix<double>.Build.Dense(rowCount, columnCount);

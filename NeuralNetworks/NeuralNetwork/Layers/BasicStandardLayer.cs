@@ -30,7 +30,11 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> Weights { get; }
 
+        public Matrix<double> WeightsTilde { get; } 
+
         public Matrix<double> Bias { get; }
+
+        public Matrix<double> BiasTilde { get; }
 
         public Matrix<double> WeightsGradient { get; }
 
@@ -38,7 +42,7 @@ namespace NeuralNetwork.Layers
 
         public Vector<double> OnesM { get; }
 
-        public IGradientAdjustmentStrategy GradientAdjustmentStrategy { get; set; }
+        public AbstractGradientAdjustmentStrategy GradientAdjustmentStrategy { get; set; }
 
 
         public BasicStandardLayer(Matrix<double> weights, Matrix<double> bias, int batchSize, IActivator activator, 
@@ -71,13 +75,7 @@ namespace NeuralNetwork.Layers
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            // Bias
-            upstreamWeightedErrors.PointwiseMultiply(NetInput.Map(Activator.ApplyDerivative), BiasedError);
-            BiasedError.Multiply(OnesM, BiasGradient);
-
-            // Weights
-            Weights.Multiply(BiasedError, WeightedError);
-            PreviousActivation.Multiply(BiasedError.Transpose().Divide(BatchSize), WeightsGradient);
+            GradientAdjustmentStrategy.BackPropagate(this, upstreamWeightedErrors);
         }
 
         public void Propagate(Matrix<double> input)
@@ -90,14 +88,7 @@ namespace NeuralNetwork.Layers
 
         public void UpdateParameters()
         {
-            GradientAdjustmentStrategy.UpdateVelocity(WeightsGradient, BiasGradient);
-
-            Weights.Add(GradientAdjustmentStrategy.WeightsVelocity, Weights);
-            Bias.SetColumn(0, Bias.Column(0).Add(GradientAdjustmentStrategy.BiasVelocity));
-            for (int i = 1; i < BatchSize; i++)
-            {
-                Bias.SetColumn(i, Bias.Column(0));
-            }
+            GradientAdjustmentStrategy.UpdateParameters(this);
         }
     }
 }

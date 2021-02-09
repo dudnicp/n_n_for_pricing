@@ -8,21 +8,20 @@ using System.Text;
 
 namespace NeuralNetwork.GradientAdjustment
 {
-    public class NesterovStrategy : IGradientAdjustmentStrategy
+    public class NesterovStrategy : AbstractGradientAdjustmentStrategy
     {
         private NesterovParameters Nesterov;
 
-        public Matrix<double> WeightsVelocity { get; set; }
-        public Vector<double> BiasVelocity { get; set; }
+        public override IGradientAdjustmentParameters Parameters => Nesterov;
 
-        public IGradientAdjustmentParameters Parameters => Nesterov;
+        private Matrix<double> PreprocessedWeights { get; set; }
 
         public NesterovStrategy(NesterovParameters nesterovParameters)
         {
             Nesterov = nesterovParameters;
         }
 
-        public void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
+        protected override void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
             if (WeightsVelocity == null)
             {
@@ -36,10 +35,22 @@ namespace NeuralNetwork.GradientAdjustment
             BiasVelocity.Subtract(biasGradient.Multiply(Nesterov.LearningRate), BiasVelocity);
         }
 
-        public void Init(int rowCount, int columnCount)
+        public override void BackPropagate(BasicStandardLayer layer, Matrix<double> upstreamWeightedError)
         {
-            WeightsVelocity = Matrix<double>.Build.Dense(rowCount, columnCount);
-            BiasVelocity = Vector<double>.Build.Dense(columnCount);
+            layer.Weights.CopyTo(PreprocessedWeights);
+
+            upstreamWeightedError.PointwiseMultiply(layer.NetInput.Map(layer.Activator.ApplyDerivative), layer.BiasedError);
+            layer.BiasedError.Multiply(layer.OnesM, layer.BiasGradient);
+
+            // Weights
+            PreprocessedWeights.Multiply(layer.BiasedError, layer.WeightedError);
+            layer.PreviousActivation.Multiply(layer.BiasedError.Transpose().Divide(layer.BatchSize), layer.WeightsGradient);
+        }
+
+        protected override void Init(int rowCount, int columnCount)
+        {
+            base.Init(rowCount, columnCount);
+            PreprocessedWeights = Matrix<double>.Build.Dense(rowCount, columnCount);
         }
     }
 }
