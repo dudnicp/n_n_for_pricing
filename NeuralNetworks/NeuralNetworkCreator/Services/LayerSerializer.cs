@@ -64,6 +64,8 @@ namespace NeuralNetworkCreator.Services
         private static ISerializedLayer SerializeInputStandardizingLayer(LayerData layer, int nextLayerSize, int inputSize, 
             ActivatorType activator, IGradientAdjustmentParameters gradientAdjustmentParameter, Random rng)
         {
+            if (inputSize != 7)
+                throw new Exception("Input standardizing layer type only handled for pricing data.\nInput size required : 7");
             double[] mean = { 9.18302351e+01, 6.45327246e+00, 1.34619841e+02, 2.71564421e-01,
                 1.09658178e+00, 3.00538796e-02, 3.58017618e-01 }; // nice hard encoding :smirk:
             double[] stdDev = { 4.05251300e+01, 2.58158032e+00, 6.59942893e+01, 7.90843930e-02,

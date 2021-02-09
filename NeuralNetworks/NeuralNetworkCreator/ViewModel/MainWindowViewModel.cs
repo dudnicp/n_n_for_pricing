@@ -74,16 +74,27 @@ namespace NeuralNetworkCreator.ViewModel
 
         public void SaveNetwork()
         {
+            string serializedContent;
+            try
+            {
+                serializedContent = JsonConvert.SerializeObject(NetworkSerializer.Serialize(Network));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             using (var dialog = new SaveFileDialog())
             {
                 dialog.InitialDirectory = ConfigurationManager.AppSettings["AbsoluteOutputPath"];
                 var result = dialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    var serializedContent = JsonConvert.SerializeObject(NetworkSerializer.Serialize(Network));
                     File.WriteAllText($"{dialog.FileName}.json", serializedContent);
                 }
             }
+            MessageBox.Show("Network saved successfully!", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Network = new NetworkData();
         }
     }
 }
