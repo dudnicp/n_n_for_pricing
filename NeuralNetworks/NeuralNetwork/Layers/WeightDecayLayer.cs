@@ -14,15 +14,15 @@ namespace NeuralNetwork.Layers
 
         public int BatchSize { get; set; }
 
-        public Matrix<double> Activation { get; }
+        public Matrix<double> Activation => UnderlyingLayer.Activation;
 
-        public Matrix<double> WeightedError { get; }
+        public Matrix<double> WeightedError => UnderlyingLayer.WeightedError;
 
-        public ILayer UnderlyingLayer { get; }
+        public BasicStandardLayer UnderlyingLayer { get; }
 
         public double DecayRate { get; }
 
-        public WeightDecayLayer(ILayer underlyingLayer, double decay, int batchSize)
+        public WeightDecayLayer(BasicStandardLayer underlyingLayer, double decay, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
             DecayRate = decay;
@@ -31,17 +31,19 @@ namespace NeuralNetwork.Layers
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
         }
 
         public void Propagate(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.Propagate(input);
         }
 
         public void UpdateParameters()
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.Weights.Multiply(1 - DecayRate, UnderlyingLayer.Weights);
+            UnderlyingLayer.Bias.Multiply(1 - DecayRate, UnderlyingLayer.Bias);
+            UnderlyingLayer.UpdateParameters();
         }
     }
 }

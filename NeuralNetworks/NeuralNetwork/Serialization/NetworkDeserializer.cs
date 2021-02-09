@@ -1,5 +1,6 @@
 ﻿using NeuralNetwork.Common.Layers;
 using NeuralNetwork.Common.Serialization;
+using System;
 
 namespace NeuralNetwork.Serialization
 {
@@ -7,6 +8,7 @@ namespace NeuralNetwork.Serialization
     {
         public static Network Deserialize(SerializedNetwork serializedNetwork)
         {
+            LayerDeserializer.Rng = new Random();
             var serializedLayers = serializedNetwork.SerializedLayers;
             var layers = new ILayer[serializedLayers.Length];
             var batchSize = serializedNetwork.BatchSize;

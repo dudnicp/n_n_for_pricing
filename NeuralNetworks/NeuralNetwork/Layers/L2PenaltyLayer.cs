@@ -14,15 +14,15 @@ namespace NeuralNetwork.Layers
 
         public int BatchSize { get; set; }
 
-        public Matrix<double> Activation { get; }
+        public Matrix<double> Activation => UnderlyingLayer.Activation;
 
-        public Matrix<double> WeightedError { get; }
+        public Matrix<double> WeightedError => UnderlyingLayer.WeightedError;
 
-        public ILayer UnderlyingLayer { get; }
+        public BasicStandardLayer UnderlyingLayer { get; }
 
         public double PenaltyCoefficient { get; }
 
-        public L2PenaltyLayer(ILayer underlyingLayer, double penalty, int batchSize)
+        public L2PenaltyLayer(BasicStandardLayer underlyingLayer, double penalty, int batchSize)
         {
             UnderlyingLayer = underlyingLayer;
             PenaltyCoefficient = penalty;
@@ -31,17 +31,18 @@ namespace NeuralNetwork.Layers
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
+            UnderlyingLayer.WeightsGradient.Add(UnderlyingLayer.Weights.Multiply(PenaltyCoefficient), UnderlyingLayer.WeightsGradient);
         }
 
         public void Propagate(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.Propagate(input);
         }
 
         public void UpdateParameters()
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.UpdateParameters();
         }
     }
 }

@@ -9,6 +9,8 @@ namespace NeuralNetwork.Serialization
 {
     public static class LayerDeserializer
     {
+        public static Random Rng { get; set; }
+
         public static ILayer Deserialize(ISerializedLayer serializedLayer, int batchSize)
         {
             switch (serializedLayer.Type)
@@ -44,7 +46,7 @@ namespace NeuralNetwork.Serialization
 
         private static ILayer DeserializeInputStandardizedLayer(SerializedInputStandardizingLayer serializedInputStandardized, int batchSize)
         {
-            var underlying = Deserialize(serializedInputStandardized.UnderlyingSerializedLayer, batchSize);
+            var underlying = Deserialize(serializedInputStandardized.UnderlyingSerializedLayer, batchSize) as BasicStandardLayer;
             var mean = serializedInputStandardized.Mean;
             var stdDev = serializedInputStandardized.StdDev;
             return new InputStandardizingLayer(underlying, mean, stdDev, batchSize);
@@ -54,19 +56,19 @@ namespace NeuralNetwork.Serialization
         {
             var layerSize = serializedDropout.LayerSize;
             var probability = serializedDropout.KeepProbability;
-            return new DropoutLayer(layerSize, probability, batchSize);
+            return new DropoutLayer(layerSize, probability, batchSize, Rng);
         }
 
         private static ILayer DeserializeL2PenaltyLayer(SerializedL2PenaltyLayer serializedL2Penalty, int batchSize)
         {
-            var underlying = Deserialize(serializedL2Penalty.UnderlyingSerializedLayer, batchSize);
+            var underlying = Deserialize(serializedL2Penalty.UnderlyingSerializedLayer, batchSize) as BasicStandardLayer;
             var penalty = serializedL2Penalty.PenaltyCoefficient;
             return new L2PenaltyLayer(underlying, penalty, batchSize);
         }
 
         private static ILayer DeserializeWeightDecayLayer(SerializedWeightDecayLayer serializedWeightDecay, int batchSize)
         {
-            var underlying = Deserialize(serializedWeightDecay.UnderlyingSerializedLayer, batchSize);
+            var underlying = Deserialize(serializedWeightDecay.UnderlyingSerializedLayer, batchSize) as BasicStandardLayer;
             var decay = serializedWeightDecay.DecayRate;
             return new WeightDecayLayer(underlying, decay, batchSize);
         }

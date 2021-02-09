@@ -30,11 +30,7 @@ namespace NeuralNetwork.Layers
 
         public Matrix<double> Weights { get; }
 
-        public Matrix<double> WeightsTilde { get; } 
-
         public Matrix<double> Bias { get; }
-
-        public Matrix<double> BiasTilde { get; }
 
         public Matrix<double> WeightsGradient { get; }
 
