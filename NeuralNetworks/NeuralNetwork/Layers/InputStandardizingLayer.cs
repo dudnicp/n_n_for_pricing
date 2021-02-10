@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
 using System;
 using System.Collections.Generic;
@@ -6,45 +7,75 @@ using System.Text;
 
 namespace NeuralNetwork.Layers
 {
-    class InputStandardizingLayer : ILayer
+    public class InputStandardizingLayer : ILayer, IComponentWithMode
     {
-        public int LayerSize { get; }
+        private int _batchSize;
+        private BasicStandardLayer _underlyingLayer;
+        private Vector<double> _meanVector;
+        private Vector<double> _stdDevVector;
+        private Matrix<double> _meanMatrix;
+        private Matrix<double> _stdDevMatrix;
+        private Matrix<double> _standardizedInput;
 
-        public int InputSize { get; }
+        public int LayerSize => UnderlyingLayer.LayerSize;
 
-        public int BatchSize { get; set; }
+        public int InputSize => UnderlyingLayer.InputSize;
 
-        public Matrix<double> Activation { get; }
-
-        public Matrix<double> WeightedError { get; }
-
-        public ILayer UnderlyingLayer { get; }
-
-        public Vector<double> Mean { get; }
-
-        public Vector<double> StdDev { get; }
-
-        public InputStandardizingLayer(ILayer underlyingLayer, double[] mean, double[] stdDev, int batchSize)
+        public int BatchSize
         {
-            UnderlyingLayer = underlyingLayer;
-            Mean = Vector<double>.Build.DenseOfArray(mean);
-            StdDev = Vector<double>.Build.DenseOfArray(stdDev);
+            get => _batchSize;
+            set
+            {
+                _batchSize = value;
+                _meanMatrix = Matrix<double>.Build.Dense(LayerSize, _batchSize);
+                _stdDevMatrix = Matrix<double>.Build.Dense(LayerSize, _batchSize);
+                for (int i = 0; i < _batchSize; i++)
+                {
+                    _meanMatrix.SetColumn(i, _meanVector);
+                    _stdDevMatrix.SetColumn(i, _stdDevVector);
+                }
+                _standardizedInput = Matrix<double>.Build.Dense(InputSize, _batchSize);
+                _underlyingLayer.BatchSize = _batchSize;
+            }
+        }
+
+        public Matrix<double> Activation => UnderlyingLayer.Activation;
+
+        public Matrix<double> WeightedError => UnderlyingLayer.WeightedError;
+
+        public BasicStandardLayer UnderlyingLayer => _underlyingLayer;
+
+        public Matrix<double> Mean => _meanMatrix;
+
+        public Matrix<double> StdDev => _stdDevMatrix;
+
+        public Matrix<double> StandardizedInput => _standardizedInput;
+
+        public Mode Mode { get; set; }
+
+        public InputStandardizingLayer(BasicStandardLayer underlyingLayer, Vector<double> mean, Vector<double> stdDev, int batchSize)
+        {
+            _underlyingLayer = underlyingLayer;
+            _meanVector = mean;
+            _stdDevVector = stdDev;
             BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
         }
 
         public void Propagate(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            input.Subtract(Mean, StandardizedInput);
+            StandardizedInput.PointwiseDivide(StdDev, StandardizedInput);
+            UnderlyingLayer.Propagate(StandardizedInput);
         }
 
         public void UpdateParameters()
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.UpdateParameters();
         }
     }
 }

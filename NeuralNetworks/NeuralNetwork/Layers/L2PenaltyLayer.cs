@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
 using System;
 using System.Collections.Generic;
@@ -6,42 +7,57 @@ using System.Text;
 
 namespace NeuralNetwork.Layers
 {
-    class L2PenaltyLayer : ILayer
+    public class L2PenaltyLayer : ILayer, IComponentWithMode
     {
-        public int LayerSize { get; }
+        private int _batchSize;
+        private BasicStandardLayer _underlyingLayer;
+        private double _penaltyCoefficient;
 
-        public int InputSize { get; }
+        public int LayerSize => UnderlyingLayer.LayerSize;
 
-        public int BatchSize { get; set; }
+        public int InputSize => UnderlyingLayer.InputSize;
 
-        public Matrix<double> Activation { get; }
-
-        public Matrix<double> WeightedError { get; }
-
-        public ILayer UnderlyingLayer { get; }
-
-        public double PenaltyCoefficient { get; }
-
-        public L2PenaltyLayer(ILayer underlyingLayer, double penalty, int batchSize)
+        public int BatchSize
         {
-            UnderlyingLayer = underlyingLayer;
-            PenaltyCoefficient = penalty;
+            get => _batchSize;
+            set
+            {
+                _batchSize = value;
+                _underlyingLayer.BatchSize = _batchSize;
+            }
+        }
+
+        public Matrix<double> Activation => UnderlyingLayer.Activation;
+
+        public Matrix<double> WeightedError => UnderlyingLayer.WeightedError;
+
+        public BasicStandardLayer UnderlyingLayer => _underlyingLayer;
+
+        public double PenaltyCoefficient => _penaltyCoefficient;
+
+        public Mode Mode { get; set; }
+
+        public L2PenaltyLayer(BasicStandardLayer underlyingLayer, double penalty, int batchSize)
+        {
+            _underlyingLayer = underlyingLayer;
+            _penaltyCoefficient = penalty;
             BatchSize = batchSize;
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.BackPropagate(upstreamWeightedErrors);
+            UnderlyingLayer.WeightsGradient.Add(UnderlyingLayer.Weights.Multiply(PenaltyCoefficient), UnderlyingLayer.WeightsGradient);
         }
 
         public void Propagate(Matrix<double> input)
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.Propagate(input);
         }
 
         public void UpdateParameters()
         {
-            throw new NotImplementedException();
+            UnderlyingLayer.UpdateParameters();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace NeuralNetwork.GradientAdjustment
 {
     public static class GradientAdjustmentStrategyFactory
     {
-        public static IGradientAdjustmentStrategy Build(IGradientAdjustmentParameters parameters)
+        public static AbstractGradientAdjustmentStrategy Build(IGradientAdjustmentParameters parameters)
         {
             switch (parameters)
             {
