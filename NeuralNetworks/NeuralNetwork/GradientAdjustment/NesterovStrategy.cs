@@ -23,11 +23,6 @@ namespace NeuralNetwork.GradientAdjustment
 
         protected override void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
-            if (WeightsVelocity == null)
-            {
-                Init(weightsGradient.RowCount, weightsGradient.ColumnCount);
-            }
-
             // Velocity update
             WeightsVelocity.Multiply(Nesterov.Momentum, WeightsVelocity); // v <- v * delta
             WeightsVelocity.Subtract(weightsGradient.Multiply(Nesterov.LearningRate), WeightsVelocity); // v <- v - eta * g
@@ -37,6 +32,11 @@ namespace NeuralNetwork.GradientAdjustment
 
         public override void BackPropagate(BasicStandardLayer layer, Matrix<double> upstreamWeightedError)
         {
+            if (WeightsVelocity == null)
+            {
+                Init(layer.Weights.RowCount, layer.Weights.ColumnCount);
+            }
+
             layer.Weights.CopyTo(PreprocessedWeights);
 
             upstreamWeightedError.PointwiseMultiply(layer.NetInput.Map(layer.Activator.ApplyDerivative), layer.BiasedError);

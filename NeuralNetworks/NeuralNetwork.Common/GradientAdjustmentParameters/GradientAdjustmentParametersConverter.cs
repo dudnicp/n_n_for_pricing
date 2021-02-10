@@ -45,6 +45,10 @@ namespace NeuralNetwork.Common.GradientAdjustmentParameters
                     asset = new MomentumParameters();
                     break;
 
+                case GradientAdjustmentType.Nesterov:
+                    asset = new NesterovParameters();
+                    break;
+
                 default:
                     throw new InvalidOperationException("Unknown gradient accelerator parameter");
             }
