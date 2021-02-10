@@ -8,7 +8,18 @@ namespace NeuralNetwork
 {
     public sealed class Network : INetwork
     {
-        public int BatchSize { get; set; }
+        private int _batchSize;
+        private Mode _mode;
+
+        public int BatchSize
+        {
+            get => _batchSize;
+            set
+            {
+                _batchSize = value;
+                foreach (ILayer layer in Layers) layer.BatchSize = _batchSize;
+            }
+        }
         public int LayerNb { get; }
         internal ILayer OutputLayer => Layers[LayerNb - 1];
         public Matrix<double> Output => OutputLayer.Activation;
@@ -16,7 +27,15 @@ namespace NeuralNetwork
 
         public ILayer[] Layers { get; }
 
-        public Mode Mode { get; set; }
+        public Mode Mode
+        {
+            get => _mode;
+            set
+            {
+                _mode = value;
+                foreach (IComponentWithMode layer in Layers) layer.Mode = _mode;
+            }
+        }
 
         public Network(ILayer[] layers, int batchSize)
         {

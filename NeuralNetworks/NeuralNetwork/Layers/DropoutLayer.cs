@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra;
+using NeuralNetwork.Common;
 using NeuralNetwork.Common.Layers;
 using System;
 using System.Collections.Generic;
@@ -7,33 +8,52 @@ using System.Text;
 
 namespace NeuralNetwork.Layers
 {
-    class DropoutLayer : ILayer
+    public class DropoutLayer : ILayer, IComponentWithMode
     {
-        public int LayerSize { get; }
+        private int _layerSize;
+        private int _inputSize;
+        private int _batchSize;
+        private Matrix<double> _activation;
+        private Matrix<double> _weightedError;
+        private double _keepProbability;
+        private Random _rng;
+        private Vector<double> _mask;
 
-        public int InputSize { get; }
+        public int LayerSize => _layerSize;
 
-        public int BatchSize { get; set; }
+        public int InputSize => _inputSize;
 
-        public Matrix<double> Activation { get; }
+        public int BatchSize
+        {
+            get => _batchSize;
+            set
+            {
+                _batchSize = value;
+                _activation = Matrix<double>.Build.Dense(_layerSize, _batchSize);
+                _weightedError = Matrix<double>.Build.Dense(_layerSize, _batchSize);
+            }
+        }
 
-        public Matrix<double> WeightedError { get; }
+        public Matrix<double> Activation => _activation;
 
-        public double KeepProbability { get; }
+        public Matrix<double> WeightedError => _weightedError;
 
-        public Random Rng { get; }
+        public double KeepProbability => _keepProbability;
 
-        public Vector<double> Mask { get; }
-        
+        public Random Rng => _rng;
+
+        public Vector<double> Mask => _mask;
+
+        public Mode Mode { get; set; }
+
         public DropoutLayer(int layerSize, double probability, int batchSize, Random rng)
         {
-            LayerSize = layerSize;
+            _layerSize = layerSize;
+            _inputSize = _layerSize;
+            _keepProbability = probability;
+            _rng = rng;
+            _mask = Vector<double>.Build.Dense(layerSize);
             BatchSize = batchSize;
-            Activation = Matrix<double>.Build.Dense(layerSize, batchSize);
-            WeightedError = Matrix<double>.Build.Dense(layerSize, batchSize);
-            KeepProbability = probability;
-            Rng = rng;
-            Mask = Vector<double>.Build.Dense(layerSize);
         }
 
         public void BackPropagate(Matrix<double> upstreamWeightedErrors)
@@ -50,13 +70,20 @@ namespace NeuralNetwork.Layers
 
         public void Propagate(Matrix<double> input)
         {
-            for (int i = 0; i < input.RowCount; i++)
+            if (Mode == Mode.Training)
             {
-                Mask.At(i, Bernoulli.Sample(Rng, KeepProbability));
-                for (int j = 0; j < input.ColumnCount; j++)
+                for (int i = 0; i < input.RowCount; i++)
                 {
-                    Activation.At(i, j, Mask.At(i) * input.At(i, j));
+                    Mask.At(i, Bernoulli.Sample(Rng, KeepProbability));
+                    for (int j = 0; j < input.ColumnCount; j++)
+                    {
+                        Activation.At(i, j, Mask.At(i) * input.At(i, j));
+                    }
                 }
+            }
+            else
+            {
+                input.CopyTo(Activation);
             }
         }
 

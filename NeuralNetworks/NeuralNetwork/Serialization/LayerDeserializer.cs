@@ -51,16 +51,8 @@ namespace NeuralNetwork.Serialization
         private static ILayer DeserializeInputStandardizedLayer(SerializedInputStandardizingLayer serializedInputStandardized, int batchSize)
         {
             var underlying = Deserialize(serializedInputStandardized.UnderlyingSerializedLayer, batchSize) as BasicStandardLayer;
-            var mean = Matrix<double>.Build.Dense(serializedInputStandardized.Mean.Length, batchSize);
-            for (int i = 0; i < mean.ColumnCount; i++)
-            {
-                mean.SetColumn(i, serializedInputStandardized.Mean);
-            }
-            var stdDev = Matrix<double>.Build.Dense(serializedInputStandardized.StdDev.Length, batchSize);
-            for (int i = 0; i < mean.ColumnCount; i++)
-            {
-                stdDev.SetColumn(i, serializedInputStandardized.StdDev);
-            }
+            var mean = Vector<double>.Build.Dense(serializedInputStandardized.Mean);
+            var stdDev = Vector<double>.Build.Dense(serializedInputStandardized.StdDev);
             return new InputStandardizingLayer(underlying, mean, stdDev, batchSize);
         }
 
