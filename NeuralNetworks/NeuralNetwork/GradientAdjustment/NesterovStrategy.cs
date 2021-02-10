@@ -8,19 +8,49 @@ using System.Text;
 
 namespace NeuralNetwork.GradientAdjustment
 {
-    public class NesterovStrategy : IGradientAdjustmentStrategy
+    public class NesterovStrategy : AbstractGradientAdjustmentStrategy
     {
-        private NesterovParameters _parameters;
-        public IGradientAdjustmentParameters Parameters => _parameters;
+        private NesterovParameters Nesterov;
 
-        public NesterovStrategy(NesterovParameters parameters)
+        public override IGradientAdjustmentParameters Parameters => Nesterov;
+
+        private Matrix<double> PreprocessedWeights { get; set; }
+
+        public NesterovStrategy(NesterovParameters nesterovParameters)
         {
-            _parameters = parameters;
+            Nesterov = nesterovParameters;
         }
 
-        public void UpdateWeightsAndBiases(BasicStandardLayer layer)
+        protected override void UpdateVelocity(Matrix<double> weightsGradient, Vector<double> biasGradient)
         {
-            throw new NotImplementedException();
+            // Velocity update
+            WeightsVelocity.Multiply(Nesterov.Momentum, WeightsVelocity); // v <- v * delta
+            WeightsVelocity.Subtract(weightsGradient.Multiply(Nesterov.LearningRate), WeightsVelocity); // v <- v - eta * g
+            BiasVelocity.Multiply(Nesterov.Momentum, BiasVelocity);
+            BiasVelocity.Subtract(biasGradient.Multiply(Nesterov.LearningRate), BiasVelocity);
+        }
+
+        public override void BackPropagate(BasicStandardLayer layer, Matrix<double> upstreamWeightedError)
+        {
+            if (WeightsVelocity == null)
+            {
+                Init(layer.Weights.RowCount, layer.Weights.ColumnCount);
+            }
+
+            layer.Weights.CopyTo(PreprocessedWeights);
+
+            upstreamWeightedError.PointwiseMultiply(layer.NetInput.Map(layer.Activator.ApplyDerivative), layer.BiasedError);
+            layer.BiasedError.Multiply(layer.OnesM, layer.BiasGradient);
+
+            // Weights
+            PreprocessedWeights.Multiply(layer.BiasedError, layer.WeightedError);
+            layer.PreviousActivation.Multiply(layer.BiasedError.Transpose().Divide(layer.BatchSize), layer.WeightsGradient);
+        }
+
+        protected override void Init(int rowCount, int columnCount)
+        {
+            base.Init(rowCount, columnCount);
+            PreprocessedWeights = Matrix<double>.Build.Dense(rowCount, columnCount);
         }
     }
 }

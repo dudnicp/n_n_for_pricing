@@ -35,8 +35,8 @@ namespace NeuralNetwork.Serialization
 
         private static ISerializedLayer SerializeInputStandardizingLayer(InputStandardizingLayer layer)
         {
-            var mean = layer.Mean.ToArray();
-            var stdDev = layer.StdDev.ToArray();
+            var mean = layer.Mean.Column(0).ToArray();
+            var stdDev = layer.StdDev.Column(0).ToArray();
             var underlying = Serialize(layer.UnderlyingLayer);
             return new SerializedInputStandardizingLayer(underlying, mean, stdDev);
         }
