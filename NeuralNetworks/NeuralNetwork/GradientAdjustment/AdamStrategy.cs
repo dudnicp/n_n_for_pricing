@@ -40,38 +40,38 @@ namespace NeuralNetwork.GradientAdjustment
             }
 
             // First Moment
-            FirstMomentWeights.Multiply(Adam.FirstMomentDecay, FirstMomentWeights);
-            FirstMomentWeights.Add(weightsGradient.Multiply(1 - Adam.FirstMomentDecay), FirstMomentWeights);
+            FirstMomentWeights.Multiply(Adam.FirstMomentDecay, FirstMomentWeights); // s <- rho_1 * s
+            FirstMomentWeights.Add(weightsGradient.Multiply(1 - Adam.FirstMomentDecay), FirstMomentWeights); // s <- (1 - rho_1) * g 
             FirstMomentBias.Multiply(Adam.FirstMomentDecay, FirstMomentBias);
             FirstMomentBias.Add(biasGradient.Multiply(1 - Adam.FirstMomentDecay), FirstMomentBias);
 
-            FirstMomentWeights.Divide(1 - Math.Pow(Adam.FirstMomentDecay, TrainingStep), FirstMomentPrimeWeights);
+            FirstMomentWeights.Divide(1 - Math.Pow(Adam.FirstMomentDecay, TrainingStep), FirstMomentPrimeWeights); // s' <- s / (1 - rho_1^i)
             FirstMomentBias.Divide(1 - Math.Pow(Adam.FirstMomentDecay, TrainingStep), FirstMomentPrimeBias);
 
 
             // Second Moment
-            SecondMomentWeights.Multiply(Adam.SecondMomentDecay, SecondMomentWeights);
-            SecondMomentWeights.Add(weightsGradient.PointwiseMultiply(weightsGradient).
-                Multiply(1 - Adam.SecondMomentDecay), SecondMomentWeights);
+            SecondMomentWeights.Multiply(Adam.SecondMomentDecay, SecondMomentWeights); // r <- rho_* r
+            SecondMomentWeights.Add(weightsGradient.PointwiseMultiply(weightsGradient). 
+                Multiply(1 - Adam.SecondMomentDecay), SecondMomentWeights); // r <- r + (1 - rho_2) * g * g
             SecondMomentBias.Multiply(Adam.SecondMomentDecay, SecondMomentBias);
             SecondMomentBias.Add(biasGradient.PointwiseMultiply(biasGradient).
                 Multiply(1 - Adam.SecondMomentDecay), SecondMomentBias);
 
-            SecondMomentWeights.Divide(1 - Math.Pow(Adam.SecondMomentDecay, TrainingStep), SecondMomentPrimeWeights);
+            SecondMomentWeights.Divide(1 - Math.Pow(Adam.SecondMomentDecay, TrainingStep), SecondMomentPrimeWeights);  // r' <- r / (1 - rho_2^i)
             SecondMomentBias.Divide(1 - Math.Pow(Adam.SecondMomentDecay, TrainingStep), SecondMomentPrimeBias);
 
             // Velocity Update
             SecondMomentPrimeWeights.PointwiseSqrt(SecondMomentPrimeWeights); // r' <- sqrt(r')
             SecondMomentPrimeWeights.Add(Adam.DenominatorFactor); // r' <- r' + delta
             FirstMomentPrimeWeights.PointwiseDivide(SecondMomentPrimeWeights, WeightsVelocityUpdate); // v' <- s' / r'
-            WeightsVelocityUpdate.Multiply(Adam.StepSize, WeightsVelocityUpdate); // v' <- eta * v'
-            WeightsVelocity.Subtract(WeightsVelocityUpdate); // v <- v - v'
+            WeightsVelocityUpdate.Multiply(-Adam.StepSize, WeightsVelocity); // v' <- eta * v'
 
             SecondMomentPrimeBias.PointwiseSqrt(SecondMomentPrimeBias); // r' <- sqrt(r')
             SecondMomentPrimeBias.Add(Adam.DenominatorFactor); // r' <- r' + delta
-            FirstMomentPrimeBias.PointwiseDivide(FirstMomentPrimeBias, BiasVelocityUpdate); // v' <- s' / r'
-            BiasVelocityUpdate.Multiply(Adam.StepSize, BiasVelocityUpdate); // v' <- eta * v'
-            BiasVelocity.Subtract(BiasVelocityUpdate); // v <- v - v'
+            FirstMomentPrimeBias.PointwiseDivide(SecondMomentPrimeBias, BiasVelocityUpdate); // v' <- s' / r'
+            BiasVelocityUpdate.Multiply(-Adam.StepSize, BiasVelocity); // v <- -eta * v'
+
+            TrainingStep++;
         }
 
         protected override void Init(int rowCount, int columnCount)

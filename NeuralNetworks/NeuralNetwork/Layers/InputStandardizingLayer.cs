@@ -27,8 +27,8 @@ namespace NeuralNetwork.Layers
             set
             {
                 _batchSize = value;
-                _meanMatrix = Matrix<double>.Build.Dense(LayerSize, _batchSize);
-                _stdDevMatrix = Matrix<double>.Build.Dense(LayerSize, _batchSize);
+                _meanMatrix = Matrix<double>.Build.Dense(InputSize, _batchSize);
+                _stdDevMatrix = Matrix<double>.Build.Dense(InputSize, _batchSize);
                 for (int i = 0; i < _batchSize; i++)
                 {
                     _meanMatrix.SetColumn(i, _meanVector);
